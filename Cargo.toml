@@ -37,8 +37,14 @@ tracing-appender = "0.2"
 anyhow = "1.0"
 futures = "0.3"
 rand = "0.8"
+clap = { version = "4.4", features = ["derive"] }
 
-# For examples
+# Main binary with subcommands
+[[bin]]
+name = "cratedocs"
+path = "src/bin/cratedocs.rs"
+
+# Keep existing binaries for backward compatibility
 [[bin]]
 name = "doc-server"
 path = "src/bin/doc_server.rs"

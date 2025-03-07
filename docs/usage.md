@@ -88,6 +88,27 @@ async function callTool(toolName, args) {
 callTool('search_crates', { query: 'async runtime', limit: 5 });
 ```
 
+## Using the CLI
+
+The CrateDocs MCP server can be started using the unified CLI:
+
+```bash
+# Show help
+cargo run --bin cratedocs -- --help
+
+# Run in STDIN/STDOUT mode
+cargo run --bin cratedocs stdio
+
+# Run in HTTP/SSE mode with default settings
+cargo run --bin cratedocs http
+
+# Run HTTP server on custom address and port
+cargo run --bin cratedocs http --address 0.0.0.0:3000
+
+# Enable debug logging
+cargo run --bin cratedocs http --debug
+```
+
 ## Example Workflows
 
 ### Helping an LLM Understand a New Crate

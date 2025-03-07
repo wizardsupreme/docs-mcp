@@ -18,25 +18,39 @@ cargo build --release
 
 ## Running the Server
 
-There are two ways to run the documentation server:
+There are multiple ways to run the documentation server:
 
-### STDIN/STDOUT Mode
+### Using the Unified CLI
 
-This mode is useful for integrating with LLM clients that communicate via standard input/output:
+The unified command-line interface provides subcommands for all server modes:
 
 ```bash
-cargo run --bin doc-server
+# Run in STDIN/STDOUT mode
+cargo run --bin cratedocs stdio
+
+# Run in HTTP/SSE mode (default address: 127.0.0.1:8080)
+cargo run --bin cratedocs http
+
+# Run in HTTP/SSE mode with custom address
+cargo run --bin cratedocs http --address 0.0.0.0:3000
+
+# Enable debug logging
+cargo run --bin cratedocs http --debug
 ```
 
-### HTTP/SSE Mode
+### Legacy Commands
 
-This mode exposes an HTTP endpoint that uses Server-Sent Events (SSE) for communication:
+For backward compatibility, you can still use the original binaries:
 
 ```bash
+# STDIN/STDOUT Mode
+cargo run --bin doc-server
+
+# HTTP/SSE Mode
 cargo run --bin axum-docs
 ```
 
-By default, the server will listen on `http://127.0.0.1:8080/sse`.
+By default, the HTTP server will listen on `http://127.0.0.1:8080/sse`.
 
 ## Available Tools
 
