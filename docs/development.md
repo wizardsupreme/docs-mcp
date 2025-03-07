@@ -1,6 +1,6 @@
 # Development Guide
 
-This guide provides information for developers who want to contribute to or modify the Rust Documentation MCP Server.
+This guide provides information for developers who want to contribute to or modify the CrateDocs MCP server.
 
 ## Architecture Overview
 

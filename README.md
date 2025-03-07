@@ -1,4 +1,4 @@
-# Rust Documentation MCP Server
+# CrateDocs MCP
 
 This is an MCP (Model Context Protocol) server that provides tools for Rust crate documentation lookup. It allows LLMs to look up documentation for Rust crates they are unfamiliar with.
 
@@ -11,8 +11,8 @@ This is an MCP (Model Context Protocol) server that provides tools for Rust crat
 ## Installation
 
 ```bash
-git clone https://github.com/yourusername/rust-doc-server.git
-cd rust-doc-server
+git clone https://github.com/yourusername/cratedocs-mcp.git
+cd cratedocs-mcp
 cargo build --release
 ```
 

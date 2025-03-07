@@ -1,6 +1,6 @@
-# Rust Documentation Server Usage Guide
+# CrateDocs MCP Usage Guide
 
-This guide explains how to use the Rust Documentation MCP Server with different types of clients.
+This guide explains how to use the CrateDocs MCP server with different types of clients.
 
 ## Client Integration
 

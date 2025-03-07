@@ -1,11 +1,11 @@
 [package]
-name = "rust-doc-server"
+name = "cratedocs-mcp"
 version = "0.1.0"
 edition = "2021"
 description = "Rust Documentation MCP Server for LLM crate assistance"
 authors = ["Your Name <your.email@example.com>"]
 license = "MIT"
-repository = "https://github.com/yourusername/rust-doc-server"
+repository = "https://github.com/yourusername/cratedocs-mcp"
 
 [workspace]
 members = [
