@@ -14,7 +14,7 @@ use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
 use anyhow::Result;
 use mcp_server::router::RouterService;
-use rust_doc_server::{jsonrpc_frame_codec::JsonRpcFrameCodec, DocRouter};
+use cratedocs_mcp::{jsonrpc_frame_codec::JsonRpcFrameCodec, DocRouter};
 use std::sync::Arc;
 use tokio::{
     io::{self, AsyncWriteExt},
@@ -131,7 +131,7 @@ async fn sse_handler(State(app): State<App>) -> Sse<impl Stream<Item = Result<Ev
     .chain(
         FramedRead::new(s2c_read, JsonRpcFrameCodec)
             .map_err(|e| io::Error::new(io::ErrorKind::InvalidData, e))
-            .and_then(move |bytes| match std::str::from_utf8(&bytes) {
+            .and_then(move |bytes| match std::str::from_utf8(bytes.as_ref()) {
                 Ok(message) => futures::future::ok(Event::default().event("message").data(message)),
                 Err(e) => futures::future::err(io::Error::new(io::ErrorKind::InvalidData, e)),
             }),

@@ -41,6 +41,12 @@ pub struct DocRouter {
     cache: DocCache,
 }
 
+impl Default for DocRouter {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl DocRouter {
     pub fn new() -> Self {
         Self {

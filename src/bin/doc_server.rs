@@ -1,7 +1,7 @@
 use anyhow::Result;
 use mcp_server::router::RouterService;
 use mcp_server::{ByteTransport, Server};
-use rust_doc_server::DocRouter;
+use cratedocs_mcp::DocRouter;
 use tokio::io::{stdin, stdout};
 use tracing_appender::rolling::{RollingFileAppender, Rotation};
 use tracing_subscriber::{self, EnvFilter};
