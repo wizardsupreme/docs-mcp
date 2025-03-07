@@ -1,0 +1,48 @@
+[package]
+name = "rust-doc-server"
+version = "0.1.0"
+edition = "2021"
+description = "Rust Documentation MCP Server for LLM crate assistance"
+authors = ["Your Name <your.email@example.com>"]
+license = "MIT"
+repository = "https://github.com/yourusername/rust-doc-server"
+
+[workspace]
+members = [
+    ".",
+]
+
+[dependencies]
+# MCP dependencies from crates.io
+mcp-server = "1.0.7"
+mcp-core = "1.0.7"
+mcp-macros = "1.0.7"
+
+# HTTP and networking
+tokio = { version = "1", features = ["full"] }
+reqwest = { version = "0.11", features = ["json"] }
+axum = { version = "0.8", features = ["macros"] }
+tokio-util = { version = "0.7", features = ["io", "codec"]}
+
+# Serialization and data formats
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+
+# Logging and tracing
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+tracing-appender = "0.2"
+
+# Utilities
+anyhow = "1.0"
+futures = "0.3"
+rand = "0.8"
+
+# For examples
+[[bin]]
+name = "doc-server"
+path = "src/bin/doc_server.rs"
+
+[[bin]]
+name = "axum-docs"
+path = "src/bin/axum_docs.rs"
