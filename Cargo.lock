@@ -349,6 +349,8 @@ dependencies = [
  "serde_json",
  "tokio",
  "tokio-util",
+ "tower 0.4.13",
+ "tower-service",
  "tracing",
  "tracing-appender",
  "tracing-subscriber",

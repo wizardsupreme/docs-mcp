@@ -11,6 +11,9 @@ use reqwest::Client;
 use serde_json::{json, Value};
 use tokio::sync::Mutex;
 
+#[cfg(test)]
+mod tests;
+
 // Cache for documentation lookups to avoid repeated requests
 #[derive(Clone)]
 struct DocCache {

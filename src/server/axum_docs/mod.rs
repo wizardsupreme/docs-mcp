@@ -6,6 +6,9 @@ use axum::{
     routing::get,
     Router,
 };
+
+#[cfg(test)]
+mod tests;
 use futures::{stream::Stream, StreamExt, TryStreamExt};
 use mcp_server::{ByteTransport, Server};
 use std::collections::HashMap;
