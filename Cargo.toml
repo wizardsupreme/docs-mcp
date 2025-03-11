@@ -52,5 +52,5 @@ name = "doc-server"
 path = "src/bin/doc_server.rs"
 
 [[bin]]
-name = "axum-docs"
+name = "http-sse-server"
 path = "src/bin/axum_docs.rs"

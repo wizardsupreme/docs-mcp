@@ -1,7 +1,7 @@
 use anyhow::Result;
 use std::net::SocketAddr;
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
-use cratedocs_mcp::server::axum_docs::App;
+use cratedocs_mcp::server::http_sse_server::App;
 
 const BIND_ADDRESS: &str = "127.0.0.1:8080";
 

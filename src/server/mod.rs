@@ -1,4 +1,4 @@
-pub mod axum_docs;
+pub mod http_sse_server;
 
 #[cfg(test)]
 mod tests;

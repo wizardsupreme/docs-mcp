@@ -95,7 +95,7 @@ async fn run_http_server(address: String, debug: bool) -> Result<()> {
     tracing::info!("Access the Rust Documentation Server at http://{}/sse", addr);
     
     // Create app and run server
-    let app = cratedocs_mcp::server::axum_docs::App::new();
+    let app = cratedocs_mcp::server::http_sse_server::App::new();
     axum::serve(listener, app.router()).await?;
     
     Ok(())
