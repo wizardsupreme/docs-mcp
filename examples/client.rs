@@ -6,9 +6,9 @@ use tokio::io::{self, AsyncBufReadExt, AsyncWriteExt, BufReader};
 
 // Simple example client for interacting with the doc server via stdin/stdout
 async fn stdio_client() -> Result<()> {
-    // Start the doc-server in a separate process
+    // Start the stdio-server in a separate process
     let mut child = tokio::process::Command::new("cargo")
-        .args(["run", "--bin", "doc-server"])
+        .args(["run", "--bin", "stdio-server"])
         .stdin(std::process::Stdio::piped())
         .stdout(std::process::Stdio::piped())
         .spawn()?;

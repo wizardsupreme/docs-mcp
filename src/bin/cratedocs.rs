@@ -48,7 +48,7 @@ async fn main() -> Result<()> {
 
 async fn run_stdio_server(debug: bool) -> Result<()> {
     // Set up file appender for logging
-    let file_appender = RollingFileAppender::new(Rotation::DAILY, "logs", "doc-server.log");
+    let file_appender = RollingFileAppender::new(Rotation::DAILY, "logs", "stdio-server.log");
 
     // Initialize the tracing subscriber with file logging
     let level = if debug { tracing::Level::DEBUG } else { tracing::Level::INFO };

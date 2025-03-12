@@ -12,7 +12,7 @@ The server consists of several key components:
    - Implements caching to avoid redundant API requests
 
 2. **Transport Implementations**:
-   - STDIN/STDOUT server (`src/bin/doc_server.rs`)
+   - STDIN/STDOUT server (`src/bin/stdio_server.rs`)
    - HTTP/SSE server (`src/bin/axum_docs.rs`)
 
 3. **Utilities**:

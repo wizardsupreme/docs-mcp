@@ -44,7 +44,7 @@ For backward compatibility, you can still use the original binaries:
 
 ```bash
 # STDIN/STDOUT Mode
-cargo run --bin doc-server
+cargo run --bin stdio-server
 
 # HTTP/SSE Mode
 cargo run --bin axum-docs

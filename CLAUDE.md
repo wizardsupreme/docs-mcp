@@ -2,7 +2,7 @@
 
 ## Build Commands
 - Build project: `cargo build`
-- Run STDIN/STDOUT server: `cargo run --bin doc-server`
+- Run STDIN/STDOUT server: `cargo run --bin stdio-server`
 - Run HTTP/SSE server: `cargo run --bin axum-docs`
 - Run tests: `cargo test`
 - Run specific test: `cargo test test_name`
