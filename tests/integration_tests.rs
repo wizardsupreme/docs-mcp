@@ -1,4 +1,4 @@
-use cratedocs_mcp::{docs::DocRouter, jsonrpc_frame_codec::JsonRpcFrameCodec};
+use cratedocs_mcp::{tools::DocRouter, transport::jsonrpc_frame_codec::JsonRpcFrameCodec};
 use mcp_core::Tool;
 use mcp_server::Router;
 use serde_json::{json, Value};

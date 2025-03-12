@@ -6,6 +6,9 @@ use axum::{
     routing::get,
     Router,
 };
+
+#[cfg(test)]
+mod tests;
 use futures::{stream::Stream, StreamExt, TryStreamExt};
 use mcp_server::{ByteTransport, Server};
 use std::collections::HashMap;
@@ -13,7 +16,7 @@ use tokio_util::codec::FramedRead;
 
 use anyhow::Result;
 use mcp_server::router::RouterService;
-use cratedocs_mcp::{transport::jsonrpc_frame_codec::JsonRpcFrameCodec, tools::DocRouter};
+use crate::{transport::jsonrpc_frame_codec::JsonRpcFrameCodec, tools::DocRouter};
 use std::sync::Arc;
 use tokio::{
     io::{self, AsyncWriteExt},

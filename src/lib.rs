@@ -1,6 +1,5 @@
-pub mod docs;
-pub mod jsonrpc_frame_codec;
-pub mod server;
+pub mod tools;
+pub mod transport;
 
 // Re-export key components for easier access
-pub use docs::DocRouter;
+pub use tools::DocRouter;
