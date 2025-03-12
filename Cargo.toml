@@ -53,4 +53,4 @@ path = "src/bin/stdio_server.rs"
 
 [[bin]]
 name = "http-sse-server"
-path = "src/bin/axum_docs.rs"
+path = "src/bin/sse_server.rs"
