@@ -10,6 +10,7 @@ use mcp_server::router::CapabilitiesBuilder;
 use reqwest::Client;
 use serde_json::{json, Value};
 use tokio::sync::Mutex;
+use html2md::parse_html;
 
 // Cache for documentation lookups to avoid repeated requests
 #[derive(Clone)]
@@ -93,14 +94,17 @@ impl DocRouter {
             )));
         }
 
-        let body = response.text().await.map_err(|e| {
+        let html_body = response.text().await.map_err(|e| {
             ToolError::ExecutionError(format!("Failed to read response body: {}", e))
         })?;
-
-        // Cache the result
-        self.cache.set(cache_key, body.clone()).await;
         
-        Ok(body)
+        // Convert HTML to markdown
+        let markdown_body = parse_html(&html_body);
+
+        // Cache the markdown result
+        self.cache.set(cache_key, markdown_body.clone()).await;
+        
+        Ok(markdown_body)
     }
 
     // Search crates.io for crates matching a query
@@ -124,7 +128,14 @@ impl DocRouter {
             ToolError::ExecutionError(format!("Failed to read response body: {}", e))
         })?;
         
-        Ok(body)
+        // Check if response is JSON (API response) or HTML (web page)
+        if body.trim().starts_with('{') {
+            // This is likely JSON data, return as is
+            Ok(body)
+        } else {
+            // This is likely HTML, convert to markdown
+            Ok(parse_html(&body))
+        }
     }
 
     // Get documentation for a specific item in a crate
@@ -159,14 +170,17 @@ impl DocRouter {
             )));
         }
 
-        let body = response.text().await.map_err(|e| {
+        let html_body = response.text().await.map_err(|e| {
             ToolError::ExecutionError(format!("Failed to read response body: {}", e))
         })?;
-
-        // Cache the result
-        self.cache.set(cache_key, body.clone()).await;
         
-        Ok(body)
+        // Convert HTML to markdown
+        let markdown_body = parse_html(&html_body);
+
+        // Cache the markdown result
+        self.cache.set(cache_key, markdown_body.clone()).await;
+        
+        Ok(markdown_body)
     }
 }
 
@@ -176,10 +190,11 @@ impl mcp_server::Router for DocRouter {
     }
 
     fn instructions(&self) -> String {
-        "This server provides tools for looking up Rust crate documentation. \
+        "This server provides tools for looking up Rust crate documentation in markdown format. \
         You can search for crates, lookup documentation for specific crates or \
         items within crates. Use these tools to find information about Rust libraries \
-        you are not familiar with.".to_string()
+        you are not familiar with. All HTML documentation is automatically converted to markdown \
+        for better compatibility with language models.".to_string()
     }
 
     fn capabilities(&self) -> ServerCapabilities {
@@ -194,7 +209,7 @@ impl mcp_server::Router for DocRouter {
         vec![
             Tool::new(
                 "lookup_crate".to_string(),
-                "Look up documentation for a Rust crate".to_string(),
+                "Look up documentation for a Rust crate (returns markdown)".to_string(),
                 json!({
                     "type": "object",
                     "properties": {
@@ -212,7 +227,7 @@ impl mcp_server::Router for DocRouter {
             ),
             Tool::new(
                 "search_crates".to_string(),
-                "Search for Rust crates on crates.io".to_string(),
+                "Search for Rust crates on crates.io (returns JSON or markdown)".to_string(),
                 json!({
                     "type": "object",
                     "properties": {
@@ -230,7 +245,7 @@ impl mcp_server::Router for DocRouter {
             ),
             Tool::new(
                 "lookup_item".to_string(),
-                "Look up documentation for a specific item in a Rust crate".to_string(),
+                "Look up documentation for a specific item in a Rust crate (returns markdown)".to_string(),
                 json!({
                     "type": "object",
                     "properties": {
