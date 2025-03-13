@@ -147,7 +147,13 @@ impl DocRouter {
     }
 
     // Get documentation for a specific item in a crate
-    async fn lookup_item(&self, crate_name: String, item_path: String, version: Option<String>) -> Result<String, ToolError> {
+    async fn lookup_item(&self, crate_name: String, mut item_path: String, version: Option<String>) -> Result<String, ToolError> {
+        // Strip crate name prefix from the item path if it exists
+        let crate_prefix = format!("{}::", crate_name);
+        if item_path.starts_with(&crate_prefix) {
+            item_path = item_path[crate_prefix.len()..].to_string();
+        }
+
         // Check cache first
         let cache_key = if let Some(ver) = &version {
             format!("{}:{}:{}", crate_name, ver, item_path)
@@ -305,7 +311,7 @@ impl mcp_server::Router for DocRouter {
                         },
                         "item_path": {
                             "type": "string",
-                            "description": "Path to the item (e.g., 'std::vec::Vec')"
+                            "description": "Path to the item (e.g., 'vec::Vec' or 'crate_name::vec::Vec' - crate prefix will be automatically stripped)"
                         },
                         "version": {
                             "type": "string",
