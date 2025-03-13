@@ -83,9 +83,13 @@ impl DocRouter {
         };
 
         // Fetch the documentation page
-        let response = self.client.get(&url).send().await.map_err(|e| {
-            ToolError::ExecutionError(format!("Failed to fetch documentation: {}", e))
-        })?;
+        let response = self.client.get(&url)
+            .header("User-Agent", "CrateDocs/0.1.0 (https://github.com/d6e/cratedocs-mcp)")
+            .send()
+            .await
+            .map_err(|e| {
+                ToolError::ExecutionError(format!("Failed to fetch documentation: {}", e))
+            })?;
 
         if !response.status().is_success() {
             return Err(ToolError::ExecutionError(format!(
@@ -113,9 +117,13 @@ impl DocRouter {
         
         let url = format!("https://crates.io/api/v1/crates?q={}&per_page={}", query, limit);
         
-        let response = self.client.get(&url).send().await.map_err(|e| {
-            ToolError::ExecutionError(format!("Failed to search crates.io: {}", e))
-        })?;
+        let response = self.client.get(&url)
+            .header("User-Agent", "CrateDocs/0.1.0 (https://github.com/d6e/cratedocs-mcp)")
+            .send()
+            .await
+            .map_err(|e| {
+                ToolError::ExecutionError(format!("Failed to search crates.io: {}", e))
+            })?;
 
         if !response.status().is_success() {
             return Err(ToolError::ExecutionError(format!(
@@ -151,36 +159,78 @@ impl DocRouter {
             return Ok(doc);
         }
 
-        // Construct the docs.rs URL for the specific item
-        let url = if let Some(ver) = version {
-            format!("https://docs.rs/{}/{}/{}/", crate_name, ver, item_path.replace("::", "/"))
-        } else {
-            format!("https://docs.rs/{}/latest/{}/", crate_name, item_path.replace("::", "/"))
-        };
-
-        // Fetch the documentation page
-        let response = self.client.get(&url).send().await.map_err(|e| {
-            ToolError::ExecutionError(format!("Failed to fetch item documentation: {}", e))
-        })?;
-
-        if !response.status().is_success() {
-            return Err(ToolError::ExecutionError(format!(
-                "Failed to fetch item documentation. Status: {}",
-                response.status()
-            )));
+        // Process the item path to determine the item type
+        // Format: module::path::ItemName
+        // Need to split into module path and item name, and guess item type
+        let parts: Vec<&str> = item_path.split("::").collect();
+        
+        if parts.is_empty() {
+            return Err(ToolError::InvalidParameters(
+                "Invalid item path. Expected format: module::path::ItemName".to_string()
+            ));
         }
-
-        let html_body = response.text().await.map_err(|e| {
-            ToolError::ExecutionError(format!("Failed to read response body: {}", e))
-        })?;
         
-        // Convert HTML to markdown
-        let markdown_body = parse_html(&html_body);
-
-        // Cache the markdown result
-        self.cache.set(cache_key, markdown_body.clone()).await;
+        let item_name = parts.last().unwrap().to_string();
+        let module_path = if parts.len() > 1 {
+            parts[..parts.len()-1].join("/")
+        } else {
+            String::new()
+        };
         
-        Ok(markdown_body)
+        // Try different item types (struct, enum, trait, fn)
+        let item_types = ["struct", "enum", "trait", "fn", "macro"];
+        let mut last_error = None;
+        
+        for item_type in item_types.iter() {
+            // Construct the docs.rs URL for the specific item
+            let url = if let Some(ver) = version.clone() {
+                if module_path.is_empty() {
+                    format!("https://docs.rs/{}/{}/{}/{}.{}.html", crate_name, ver, crate_name, item_type, item_name)
+                } else {
+                    format!("https://docs.rs/{}/{}/{}/{}/{}.{}.html", crate_name, ver, crate_name, module_path, item_type, item_name)
+                }
+            } else {
+                if module_path.is_empty() {
+                    format!("https://docs.rs/{}/latest/{}/{}.{}.html", crate_name, crate_name, item_type, item_name)
+                } else {
+                    format!("https://docs.rs/{}/latest/{}/{}/{}.{}.html", crate_name, crate_name, module_path, item_type, item_name)
+                }
+            };
+            
+            // Try to fetch the documentation page
+            let response = match self.client.get(&url)
+                .header("User-Agent", "CrateDocs/0.1.0 (https://github.com/d6e/cratedocs-mcp)")
+                .send().await {
+                Ok(resp) => resp,
+                Err(e) => {
+                    last_error = Some(e.to_string());
+                    continue;
+                }
+            };
+            
+            // If found, process and return
+            if response.status().is_success() {
+                let html_body = response.text().await.map_err(|e| {
+                    ToolError::ExecutionError(format!("Failed to read response body: {}", e))
+                })?;
+                
+                // Convert HTML to markdown
+                let markdown_body = parse_html(&html_body);
+                
+                // Cache the markdown result
+                self.cache.set(cache_key, markdown_body.clone()).await;
+                
+                return Ok(markdown_body);
+            }
+            
+            last_error = Some(format!("Status code: {}", response.status()));
+        }
+        
+        // If we got here, none of the item types worked
+        Err(ToolError::ExecutionError(format!(
+            "Failed to fetch item documentation. No matching item found. Last error: {}",
+            last_error.unwrap_or_else(|| "Unknown error".to_string())
+        )))
     }
 }
 

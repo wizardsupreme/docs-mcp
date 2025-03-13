@@ -159,10 +159,14 @@ async fn run_test_tool(
         println!("Usage examples:");
         println!("  cargo run --bin cratedocs -- test --tool lookup_crate --crate-name serde");
         println!("  cargo run --bin cratedocs -- test --tool lookup_crate --crate-name tokio --version 1.35.0");
+        println!("  cargo run --bin cratedocs -- test --tool lookup_item --crate-name tokio --item-path sync::mpsc::Sender");
+        println!("  cargo run --bin cratedocs -- test --tool lookup_item --crate-name serde --item-path Serialize --version 1.0.147");
         println!("  cargo run --bin cratedocs -- test --tool search_crates --query logger\n");
         println!("Available tools:");
         println!("  lookup_crate   - Look up documentation for a Rust crate");
         println!("  lookup_item    - Look up documentation for a specific item in a crate");
+        println!("                   Format: 'module::path::ItemName' (e.g., 'sync::mpsc::Sender')");
+        println!("                   The tool will try to detect if it's a struct, enum, trait, fn, or macro");
         println!("  search_crates  - Search for crates on crates.io");
         println!("  help           - Show this help information\n");
         return Ok(());
@@ -224,9 +228,12 @@ async fn run_test_tool(
         Ok(result) => result,
         Err(e) => {
             eprintln!("\nERROR: {}", e);
-            eprintln!("\nTip: The direct item lookup may require very specific path formats. Try these commands instead:");
+            eprintln!("\nTip: Try these suggestions:");
             eprintln!("  - For crate docs: cargo run --bin cratedocs -- test --tool lookup_crate --crate-name tokio");
-            eprintln!("  - For crate docs with version: cargo run --bin cratedocs -- test --tool lookup_crate --crate-name serde --version 1.0.147");
+            eprintln!("  - For item lookup: cargo run --bin cratedocs -- test --tool lookup_item --crate-name tokio --item-path sync::mpsc::Sender");
+            eprintln!("  - For item lookup with version: cargo run --bin cratedocs -- test --tool lookup_item --crate-name serde --item-path Serialize --version 1.0.147");
+            eprintln!("  - For crate search: cargo run --bin cratedocs -- test --tool search_crates --query logger --limit 5");
+            eprintln!("  - For help: cargo run --bin cratedocs -- test --tool help");
             return Ok(());
         }
     };
