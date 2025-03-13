@@ -1,6 +1,5 @@
-use super::*;
+use crate::tools::{DocRouter, DocCache};
 use mcp_core::{Content, ToolError};
-use mcp_server::Router;
 use serde_json::json;
 
 #[tokio::test]

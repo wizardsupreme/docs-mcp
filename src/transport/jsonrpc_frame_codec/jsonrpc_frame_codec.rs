@@ -3,8 +3,6 @@ use tokio_util::codec::Decoder;
 #[derive(Default)]
 pub struct JsonRpcFrameCodec;
 
-#[cfg(test)]
-mod tests;
 impl Decoder for JsonRpcFrameCodec {
     type Item = tokio_util::bytes::Bytes;
     type Error = tokio::io::Error;

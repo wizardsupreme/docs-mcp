@@ -11,28 +11,25 @@ use reqwest::Client;
 use serde_json::{json, Value};
 use tokio::sync::Mutex;
 
-#[cfg(test)]
-mod tests;
-
 // Cache for documentation lookups to avoid repeated requests
 #[derive(Clone)]
-struct DocCache {
+pub struct DocCache {
     cache: Arc<Mutex<std::collections::HashMap<String, String>>>,
 }
 
 impl DocCache {
-    fn new() -> Self {
+    pub fn new() -> Self {
         Self {
             cache: Arc::new(Mutex::new(std::collections::HashMap::new())),
         }
     }
 
-    async fn get(&self, key: &str) -> Option<String> {
+    pub async fn get(&self, key: &str) -> Option<String> {
         let cache = self.cache.lock().await;
         cache.get(key).cloned()
     }
 
-    async fn set(&self, key: String, value: String) {
+    pub async fn set(&self, key: String, value: String) {
         let mut cache = self.cache.lock().await;
         cache.insert(key, value);
     }

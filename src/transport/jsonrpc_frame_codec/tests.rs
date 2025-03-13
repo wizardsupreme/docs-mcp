@@ -1,5 +1,6 @@
-use super::*;
+use crate::transport::jsonrpc_frame_codec::JsonRpcFrameCodec;
 use tokio_util::bytes::BytesMut;
+use tokio_util::codec::Decoder;
 
 #[test]
 fn test_decode_single_line() {

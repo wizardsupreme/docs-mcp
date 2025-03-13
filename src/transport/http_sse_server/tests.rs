@@ -1,18 +1,11 @@
-use super::*;
-use axum::{
-    body::Body,
-    http::{Method, Request},
-};
-use tokio::sync::RwLock;
+use crate::transport::http_sse_server::App;
 // Comment out tower imports for now, as we'll handle router testing differently
 // use tower::Service; 
 // use tower::util::ServiceExt;
 
 // Helper function to create an App with an empty state
 fn create_test_app() -> App {
-    App {
-        txs: Arc::new(RwLock::new(HashMap::new())),
-    }
+    App::new()
 }
 
 #[tokio::test]
