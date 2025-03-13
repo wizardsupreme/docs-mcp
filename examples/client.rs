@@ -1,5 +1,4 @@
 use anyhow::Result;
-use futures::StreamExt;
 use reqwest::Client;
 use serde_json::{json, Value};
 use tokio::io::{self, AsyncBufReadExt, AsyncWriteExt, BufReader};
@@ -68,8 +67,6 @@ async fn http_sse_client() -> Result<()> {
     // Give the server some time to start
     tokio::time::sleep(tokio::time::Duration::from_secs(2)).await;
 
-    // Connect to the SSE endpoint to get a session ID
-    let mut session_id = String::new();
     let sse_url = "http://127.0.0.1:8080/sse";
     
     println!("Getting session ID from SSE endpoint...");
@@ -84,13 +81,12 @@ async fn http_sse_client() -> Result<()> {
 
     // Parse the first message to get the session ID
     // In a real implementation, you would properly handle the SSE stream
-    if let Some(event_data) = response.headers().get("x-accel-buffering") {
-        // This is just a placeholder - in a real SSE client you would parse the actual event
-        session_id = "example_session_id".to_string(); 
-    } else {
+    if let None = response.headers().get("x-accel-buffering") {
         println!("Could not get session ID from SSE endpoint");
         return Ok(());
     }
+    // This is just a placeholder - in a real SSE client you would parse the actual event
+    let session_id = "example_session_id".to_string(); 
 
     // Send a request to search for crates
     let request_url = format!("{}?sessionId={}", sse_url, session_id);
