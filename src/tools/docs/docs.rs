@@ -17,6 +17,12 @@ pub struct DocCache {
     cache: Arc<Mutex<std::collections::HashMap<String, String>>>,
 }
 
+impl Default for DocCache {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl DocCache {
     pub fn new() -> Self {
         Self {

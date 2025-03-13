@@ -24,7 +24,7 @@ async fn test_doc_router_initialization() {
 
 #[test]
 fn test_jsonrpc_codec_functionality() {
-    let mut codec = JsonRpcFrameCodec::default();
+    let mut codec = JsonRpcFrameCodec;
     let json_rpc = r#"{"jsonrpc":"2.0","method":"lookup_crate","params":{"crate_name":"tokio"},"id":1}"#;
     
     let mut buffer = tokio_util::bytes::BytesMut::from(json_rpc);
