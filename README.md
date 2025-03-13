@@ -38,16 +38,32 @@ cargo run --bin cratedocs http --address 0.0.0.0:3000
 cargo run --bin cratedocs http --debug
 ```
 
-### Legacy Commands
+### Directly Testing Documentation Tools
 
-For backward compatibility, you can still use the original binaries:
+You can directly test the documentation tools from the command line without starting a server:
 
 ```bash
-# STDIN/STDOUT Mode
-cargo run --bin stdio-server
+# Get help for the test command
+cargo run --bin cratedocs test --tool help
 
-# HTTP/SSE Mode
-cargo run --bin axum-docs
+# Look up crate documentation
+cargo run --bin cratedocs test --tool lookup_crate --crate-name tokio
+
+# Look up item documentation
+cargo run --bin cratedocs test --tool lookup_item --crate-name tokio --item-path sync::mpsc::Sender
+
+# Look up documentation for a specific version
+cargo run --bin cratedocs test --tool lookup_item --crate-name serde --item-path Serialize --version 1.0.147
+
+# Search for crates
+cargo run --bin cratedocs test --tool search_crates --query logger --limit 5
+
+# Output in different formats (markdown, text, json)
+cargo run --bin cratedocs test --tool search_crates --query logger --format json
+cargo run --bin cratedocs test --tool lookup_crate --crate-name tokio --format text
+
+# Save output to a file
+cargo run --bin cratedocs test --tool lookup_crate --crate-name tokio --output tokio-docs.md
 ```
 
 By default, the HTTP server will listen on `http://127.0.0.1:8080/sse`.
