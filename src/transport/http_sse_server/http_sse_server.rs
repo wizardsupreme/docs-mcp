@@ -28,7 +28,7 @@ type SessionId = Arc<str>;
 
 #[derive(Clone, Default)]
 pub struct App {
-    txs: Arc<tokio::sync::RwLock<HashMap<SessionId, C2SWriter>>>,
+    pub txs: Arc<tokio::sync::RwLock<HashMap<SessionId, C2SWriter>>>,
 }
 
 impl App {

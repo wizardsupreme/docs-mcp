@@ -23,8 +23,9 @@ tokio = { version = "1", features = ["full"] }
 reqwest = { version = "0.11", features = ["json"] }
 axum = { version = "0.8", features = ["macros"] }
 tokio-util = { version = "0.7", features = ["io", "codec"]}
-tower = "0.4"
+tower = { version = "0.4", features = ["util"] }
 tower-service = "0.3"
+hyper = "0.14"
 
 # Serialization and data formats
 serde = { version = "1.0", features = ["derive"] }
@@ -40,6 +41,10 @@ anyhow = "1.0"
 futures = "0.3"
 rand = "0.8"
 clap = { version = "4.4", features = ["derive"] }
+
+[dev-dependencies]
+# Testing utilities
+mockito = "1.2"
 
 # Main binary with subcommands
 [[bin]]

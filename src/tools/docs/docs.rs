@@ -43,8 +43,8 @@ impl DocCache {
 
 #[derive(Clone)]
 pub struct DocRouter {
-    client: Client,
-    cache: DocCache,
+    pub client: Client,
+    pub cache: DocCache,
 }
 
 impl Default for DocRouter {
