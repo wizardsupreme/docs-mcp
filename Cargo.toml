@@ -45,12 +45,3 @@ clap = { version = "4.4", features = ["derive"] }
 [[bin]]
 name = "cratedocs"
 path = "src/bin/cratedocs.rs"
-
-# Keep existing binaries for backward compatibility
-[[bin]]
-name = "stdio-server"
-path = "src/bin/stdio_server.rs"
-
-[[bin]]
-name = "http-sse-server"
-path = "src/bin/sse_server.rs"
