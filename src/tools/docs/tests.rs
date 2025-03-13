@@ -1,3 +1,8 @@
+use crate::tools::DocCache;
+use crate::DocRouter;
+use mcp_core::{Content, ToolError};
+use serde_json::json;
+use mcp_server::Router;
 
 #[tokio::test]
 async fn test_doc_cache() {
