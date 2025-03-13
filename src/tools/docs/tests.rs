@@ -1,5 +1,5 @@
 use crate::tools::DocCache;
-use crate::DocRouter;
+use crate::tools::DocRouter;
 use mcp_core::{Content, ToolError};
 use serde_json::json;
 use mcp_server::Router;

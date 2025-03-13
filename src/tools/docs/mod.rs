@@ -1,4 +1,6 @@
 pub mod docs;
-mod tests;
 
 pub use docs::DocRouter;
+
+#[cfg(test)]
+mod tests;

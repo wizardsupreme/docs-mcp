@@ -23,12 +23,6 @@ async fn test_router_setup() {
     assert!(true);
 }
 
-// Test removed since session_id is private
-// #[tokio::test]
-// async fn test_session_id_generation() {
-//     // Test removed
-// }
-
 #[tokio::test]
 async fn test_post_event_handler_not_found() {
     let app = App::new();
