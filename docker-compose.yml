@@ -1,0 +1,8 @@
+version: '3.8'
+services:
+  cratedocs_server:
+    image: ghcr.io/wizardsupreme/docs-mcp:latest
+    command: ["http", "--address", "0.0.0.0:8080"]
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
